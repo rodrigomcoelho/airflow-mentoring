@@ -1,7 +1,8 @@
-from airflow import DAG
 from datetime import datetime
+
+from airflow import DAG
 from airflow.operators.empty import EmptyOperator
-from internal.resources.operators.tabnews import TabNewsOperator
+from internal.resources.operators.tabnews import TabNewsToJSONFileOperator
 
 with DAG(
     dag_id="tabnews",
@@ -9,17 +10,19 @@ with DAG(
     schedule_interval="@daily",
     tags=["tabnews", "ingestion"],
     catchup=False,
-    default_args={
-        "depends_on_past": False,
-        "owner": "rodrigomcoelho"
-    }
+    default_args={"depends_on_past": False, "owner": "rodrigomcoelho"},
 ) as dag:
     jobs = {
         "start": EmptyOperator(task_id="start"),
         "stop": EmptyOperator(task_id="stop"),
     }
 
-    jobs["main"] = TabNewsOperator(task_id="main_execution")
+    jobs["main"] = TabNewsToJSONFileOperator(
+        task_id="main_execution",
+        tabnews_conn_id="conn_tabnews",
+        endpoint="/contents",
+        root_directory="/opt/airflow/output",
+    )
 
     jobs["main"].set_downstream(jobs["stop"])
     jobs["main"].set_upstream(jobs["start"])

@@ -5,7 +5,6 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 
-
 def sleeping() -> None:
     print("Vou dormir por 10 segundos.")
     sleep(10)
