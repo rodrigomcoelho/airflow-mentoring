@@ -1,3 +1,4 @@
 {
-    "python.analysis.extraPaths": ["./plugins"]
+    "python.analysis.extraPaths": ["./plugins"],
+    "cSpell.language": "en,pt,pt_BR"
 }
