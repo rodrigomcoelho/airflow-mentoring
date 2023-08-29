@@ -1,5 +1,5 @@
 import json
-from os.path import join, dirname, exists
+from os.path import dirname, exists, join
 from pathlib import Path
 from typing import Dict, List
 
