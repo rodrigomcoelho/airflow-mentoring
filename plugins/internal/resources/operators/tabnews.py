@@ -12,25 +12,30 @@ class TabNewsEndpointNotFound(Exception):
 
 
 class TabNewsToJSONFileOperator(BaseOperator):
+
+    template_fields = ("_execution_date")
+
     def __init__(
         self,
         tabnews_conn_id: str,
         endpoint: str,
         root_directory: str,
+        execution_date: str,
         *args,
         **kwargs,
     ):
         self.__endpoint = endpoint
         self.__tabnews_hook = TabNewsHook(tabnews_conn_id)
         self.__root_directory = root_directory
+        self._execution_date = execution_date
         super().__init__(*args, **kwargs)
 
     def write(self, content: List[Dict]):
         json_hook = JSONFileHook(self.__root_directory)
-        date = datetime(year=2023, month=8, day=3)
-        year = date.year
-        month = date.month
-        day = date.day
+        date = datetime.strptime(self._execution_date, "%Y-%m-%d")
+        year = str(date.year).zfill(4)
+        month = str(date.month).zfill(2)
+        day = str(date.day).zfill(2)
 
         filename = f"year={year}/month={month}/day={day}/{year}{month}{day}.json"
         json_hook.save(content, filename)
@@ -42,6 +47,7 @@ class TabNewsToJSONFileOperator(BaseOperator):
             raise TabNewsEndpointNotFound("Endpoint is required.")
 
         contents = self.__tabnews_hook.get_rows(endpoint=self.__endpoint)
+
         self.log.info(f"{len(contents)} registros foram recuperados.\n")
 
         self.write(content=contents)
