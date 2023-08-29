@@ -24,5 +24,5 @@ source .venv/bin/active
 - [X] A URL está fixa. Precisamos para uma conexão.
 - [X] O endpoint está fixo. Precisamos receber como argumento.
 - [x] Operador apenas logando as linhas. Precisando descarregar em algum local.
-- [ ] Caminho está sendo salvo com um digito para o mês e dia.
-- [ ] Estamos reescrevendo do dia de hoje quando reexecutamos tasks referentes a dias no passado.
+- [x] Caminho está sendo salvo com um digito para o mês e dia.
+- [x] Estamos reescrevendo do dia de hoje quando reexecutamos tasks referentes a dias no passado.
